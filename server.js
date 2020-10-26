@@ -10,7 +10,7 @@ const connection = mysql.createConnection({
   
     // Your password
     password: "Jjrt2!171009",
-    database: "ee_info_db"
+    database: "employeedb"
   });
   
   connection.connect(function(err) {
@@ -68,6 +68,25 @@ const connection = mysql.createConnection({
         }
       });
   }
+
+  function addDepartment() {
+    inquirer.prompt({
+      
+        type: "input",
+        message: "What is the name of the department?",
+        name: "deptName"
+
+    }).then(function(answer){
+
+
+
+        connection.query("INSERT INTO department (name) VALUES (?)", [answer.deptName] , function(err, res) {
+            if (err) throw err;
+            console.table(res);
+            startScreen();
+    })
+    });
+}
   
   function addRole() {
     inquirer
@@ -89,9 +108,9 @@ const connection = mysql.createConnection({
         }
       ])
       .then(function(answer) {
-        let query = `INSERT INTO role (title, salary, department_id) VALUES ("${answer.roleName}", "${answer.salaryTotal}", ${answer.deptID})`;
-  
-        connection.query(query, function(err, res) {
+
+
+        connection.query("INSERT INTO role (title, salary, department_id) VALUES (?, ?, ?)", [answer.roleName, answer.salaryTotal, answer.deptID], function(err, res) {
           if (err) throw err;
           console.table(res);
           startScreen();
@@ -135,12 +154,21 @@ const connection = mysql.createConnection({
   }
   
   function updateEmployee() {
+    let total;
+    let query = 'SELECT * FROM employee';
+
+    connection.query(query, function(err, res){
+        if (err) throw err;
+        total = res;
+        console.log(total);
+    });
+    
     inquirer
       .prompt([
         {
           type: "list",
           message: "Which employee would you like to update?",
-          choices: ["Ozzy", "Joan", "Jack", "Wax"],
+          choices: [total],
           name: "eeUpdate"
         },
   
@@ -151,10 +179,7 @@ const connection = mysql.createConnection({
         }
       ])
       .then(function(answer) {
-        // let query = `INSERT INTO department (name) VALUES ("${answer.deptName}")`
-        //let query = `'UPDATE employee SET role_id=${answer.updateRole} WHERE first_name= ${answer.eeUpdate}`;
-        //console.log(query);
-  
+         
         connection.query('UPDATE employee SET role_id=? WHERE first_name= ?',[answer.updateRole, answer.eeUpdate],function(err, res) {
           if (err) throw err;
           console.table(res);
