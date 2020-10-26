@@ -154,8 +154,13 @@ const connection = mysql.createConnection({
   }
   
   function updateEmployee() {
-    let total;
+    let total = "";
     let query = 'SELECT * FROM employee';
+
+    array = [ 1, 2, 3, 4, 5, 6 ]; 
+    for (index = 0; index < array.length; index++) { 
+    console.log(array[index]); 
+    } 
 
     connection.query(query, function(err, res){
         if (err) throw err;
