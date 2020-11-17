@@ -1,4 +1,4 @@
-# employee-tracker  # Employee Tracker
+ # Employee Tracker
 
   ![license](https://img.shields.io/badge/License-MIT-brightgreen.svg)
 
@@ -20,7 +20,7 @@
 
   ## Installation
 
-  * npm int 
+  * npm init 
   * inquirer 
   * console.table 
   * express.js 
@@ -29,7 +29,7 @@
 
   ## Screenshot
   
-  ![image](https://user-images.githubusercontent.com/67935542/99463184-0a961b80-28ea-11eb-9674-2e2638c42ff1.png)
+  ![image](https://user-images.githubusercontent.com/67935542/99463691-2cdc6900-28eb-11eb-88ab-81f4bd029768.png)
 
   ## Video Link
 
