@@ -1,4 +1,4 @@
-const mysql = require('mysql2');
+const mysql = require('mysql');
 const inquirer = require('inquirer');
 const cTable = require('console.table');
 
@@ -154,44 +154,29 @@ const connection = mysql.createConnection({
   }
   
   function updateEmployee() {
-    let total = "";
-    let query = 'SELECT * FROM employee';
-
-    array = [ 1, 2, 3, 4, 5, 6 ]; 
-    for (index = 0; index < array.length; index++) { 
-    console.log(array[index]); 
-    } 
-
-    connection.query(query, function(err, res){
-        if (err) throw err;
-        total = res;
-        console.log(total);
-    });
-    
     inquirer
-      .prompt([
-        {
-          type: "list",
-          message: "Which employee would you like to update?",
-          choices: [total],
-          name: "eeUpdate"
-        },
-  
-        {
-          type: "input",
-          message: "What do you want to update to?",
-          name: "updateRole"
-        }
-      ])
-      .then(function(answer) {
-         
-        connection.query('UPDATE employee SET role_id=? WHERE first_name= ?',[answer.updateRole, answer.eeUpdate],function(err, res) {
-          if (err) throw err;
-          console.table(res);
-          startScreen();
-        });
+    .prompt([
+      {
+        type: "input",
+        message: "Which employee (first_name) would you like to update?",
+        name: "eeUpdate"
+      },
+
+      {
+        type: "input",
+        message: "What do you want to update to?",
+        name: "updateRole"
+      }
+    ])
+    .then(function(answer) {
+    
+      connection.query('UPDATE employee SET role_id=? WHERE first_name= ?',[answer.updateRole, answer.eeUpdate],function(err, res) {
+        if (err) throw err;
+        console.table(res);
+        startScreen();
       });
-  }
+    });
+}
   
   function viewDepartment() {
     // select from the db
@@ -215,7 +200,7 @@ const connection = mysql.createConnection({
   
   function viewEmployees() {
     // select from the db
-    let query = "SELECT * FROM employee";
+    let query = "SELECT employee.id, employee.first_name, employee.last_name, employee.manager_id, role.title, role.salary, department.name FROM employee LEFT JOIN role ON employee.role_id = role.id LEFT JOIN department ON role.department_id = department.id";
     connection.query(query, function(err, res) {
       if (err) throw err;
       console.table(res);
